@@ -1,0 +1,2 @@
+custom: makefile
+	cp ./.emacs ~/
