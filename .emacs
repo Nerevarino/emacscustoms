@@ -1,50 +1,41 @@
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ggtags-executable-directory "/opt/global-6.6.1/bin")
- '(initial-buffer-choice t)
- '(package-selected-packages
-   (quote
-    (company function-args helm-projectile helm-swoop use-package helm-gtags helm)))
- '(tool-bar-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "black" :foreground "dark gray" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 128 :width normal :foundry "DAMA" :family "Ubuntu Mono"))))
- '(font-lock-comment-face ((t (:foreground "lawn green")))))
-
-
-
-
-
-;; bcustom
-
-;; bpackage
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
-;; epackage
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
-;; busepackage
-(when (not package-archive-contents)
-    (package-refresh-contents))
 
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
+;; bsemantic
+(add-hook 'c-mode-common-hook (lambda()
+				(semantic-mode 1)
+				(global-semantic-idle-scheduler-mode 1)			
+				))
+;; esemantic
 
-(require 'use-package)
-(setq use-package-always-ensure t)
-;; eusepackage
+
+;; bprojects
+(add-hook 'c-mode-common-hook (lambda()
+				(global-ede-mode 1)
+				(ede-cpp-root-project "app"
+						      :file "~/projects/test/CMakeLists.txt"
+						      :include-path '("~/projects/test/include"))				
+				))
+;; eprojects
+
+;; bac
+(require 'auto-complete)
+(require 'ac-c-headers)
+(ac-config-default)
+(setq ac-auto-start nil)
+(define-key ac-mode-map (kbd "C-x c") 'auto-complete)
+(add-hook 'c-mode-common-hook (lambda()
+				(add-to-list 'ac-sources 'ac-source-semantic)
+				(add-to-list 'ac-sources 'ac-source-c-headers)
+				;; (add-to-list 'ac-sources 'ac-source-c-header-symbols t)	
+				
+				))
+;; eac
+
+
+
 
 ;; bhelm
 (use-package helm
@@ -192,7 +183,7 @@
 ;; bggtags
 (require 'ggtags)
 
-(ggtags-mode 1)
+;; (ggtags-mode 1)
 (add-hook 'c-mode-common-hook
           (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
@@ -215,52 +206,32 @@
   (define-key map (kbd "C-c >") 'ggtags-next-mark))
 ;; eggtags
 
+;; byasnippet
+(require 'yasnippet)
+(yas-global-mode 1)
+;; eyasnippet
 
-;; bgtagshelm
-;; (setq helm-gtags-prefix-key "\C-cg")
+;; brpm
+(autoload 'rpm-spec-mode "rpm-spec-mode.el" "RPM spec mode." t)
+ (setq auto-mode-alist (append '(("\\.spec" . rpm-spec-mode))
+                               auto-mode-alist))
+;; erpm
 
-;; (use-package helm-gtags
-;;   :init
-;;   (progn
-;;     (setq helm-gtags-ignore-case t
-;;           helm-gtags-auto-update t
-;;           helm-gtags-use-input-at-cursor t
-;;           helm-gtags-pulse-at-cursor t
-;;           helm-gtags-prefix-key "\C-cg"
-;;           helm-gtags-suggested-key-mapping t)
-
-;;     ;; Enable helm-gtags-mode in Dired so you can jump to any tag
-;;     ;; when navigate project tree with Dired
-;;     (add-hook 'dired-mode-hook 'helm-gtags-mode)
-
-;;     ;; Enable helm-gtags-mode in Eshell for the same reason as above
-;;     (add-hook 'eshell-mode-hook 'helm-gtags-mode)
-
-;;     ;; Enable helm-gtags-mode in languages that GNU Global supports
-;;     (add-hook 'c-mode-hook 'helm-gtags-mode)
-;;     (add-hook 'c++-mode-hook 'helm-gtags-mode)
-;;     (add-hook 'java-mode-hook 'helm-gtags-mode)
-;;     (add-hook 'asm-mode-hook 'helm-gtags-mode)
-;;     (add-hook 'text-mode-hook 'helm-gtags-mode)
-;;     (add-hook 'shell-mode-hook 'helm-gtags-mode)
-
-;;     ;; key bindings
-;;     (with-eval-after-load 'helm-gtags
-;;       (define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
-;;       (define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
-;;       (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
-;;       (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
-;;       (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-;;       (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history))))
-;; egtagshelm
-
-;; bfunctionargs
-(require 'function-args)
-;; efunctionargs
-
-;;bcompany
-(require 'company)
-(add-hook 'after-init-hook 'global-company-mode)
-;;ecompany
-
-;; ecustom
+;; -------------------------------------------------------------auto-generated----------------------------------------------------
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(initial-buffer-choice t)
+ '(package-selected-packages
+   (quote
+    (yasnippet-snippets yasnippet ggtags ac-c-headers helm-projectile projectile use-package helm auto-complete rpm-spec-mode)))
+ '(tool-bar-mode nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "black" :foreground "dark gray" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 113 :width normal :foundry "PfEd" :family "DejaVu Sans Mono"))))
+ '(font-lock-comment-face ((t (:foreground "lawn green")))))
